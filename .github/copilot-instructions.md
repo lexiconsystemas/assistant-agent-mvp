@@ -49,3 +49,10 @@ If this file is out-of-date
 
 Feedback
 - If anything here is unclear or you want additional examples (unit tests, debug tips, or a small local runbook), ask and I will expand.
+
+## Scope Discipline Rules
+- No refactors unless explicitly requested.
+- Smallest viable patch only.
+- Never replace real API behavior with TestClient/monkeypatching.
+- Scripts must use HTTP against a running server unless explicitly marked as tests.
+- Preserve invariants: single FastAPI app; /chat appends once per role.

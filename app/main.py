@@ -8,6 +8,9 @@ from app.agent import handle_message
 from app.schemas import ChatRequest, ChatResponse
 from app.logging_middleware import RequestLoggingMiddleware
 from app.memory import store
+from app.proactive import proactive_prompt
+from app.tools import run_tool
+from datetime import datetime, timezone
 
 load_dotenv()
 
@@ -40,6 +43,90 @@ def get_tasks(session_id: str):
         "session_id": session_id,
         "tasks": [t.__dict__ for t in tasks],
     }
+
+
+@app.get("/sessions/{session_id}/proactive")
+def get_proactive(session_id: str):
+    """Return a small proactive outreach message or null.
+
+    Response shape: {"message": <string or null>}
+    """
+    msg = proactive_prompt(session_id=session_id)
+    return {"message": msg}
+
+
+@app.get("/sessions/{session_id}/reminders")
+def get_reminders(session_id: str):
+    reminders = store.list_reminders(session_id=session_id)
+    return {"session_id": session_id, "reminders": [r.__dict__ for r in reminders]}
+
+
+@app.get("/sessions/{session_id}/checkins")
+def get_checkins(session_id: str):
+    c = store.list_checkins(session_id=session_id)
+    return {"session_id": session_id, "checkins": [ck.__dict__ for ck in c]}
+
+
+@app.get("/sessions/{session_id}/dashboard")
+def get_dashboard(session_id: str):
+    # use the today_summary tool for consistent business logic
+    res = run_tool("today_summary", session_id, {})
+    return {"session_id": session_id, "dashboard": res}
+
+
+@app.post("/sessions/{session_id}/proactive/tick")
+def proactive_tick(session_id: str):
+    """Run proactive evaluation once and queue an outbound message if needed.
+
+    Returns: {"queued": bool, "message": <string or null>}
+    """
+    msg = proactive_prompt(session_id=session_id)
+    if not msg:
+        return {"queued": False, "message": None}
+
+    # avoid duplicate spam: if last outbox message has same text within 60 minutes, skip
+    last = None
+    out = store.list_outbox(session_id=session_id, limit=1)
+    if out:
+        last = out[-1]
+    if last:
+        try:
+            last_ts = datetime.fromisoformat(last.ts)
+            if last.text == msg and (datetime.now(timezone.utc) - last_ts).total_seconds() < 3600:
+                return {"queued": False, "message": None}
+        except Exception:
+            pass
+
+    queued = store.add_outbox(session_id=session_id, text=msg, reason="proactive_tick")
+    return {"queued": True, "message": queued.text}
+
+
+@app.get("/sessions/{session_id}/outbox")
+def get_outbox(session_id: str):
+    msgs = store.list_outbox(session_id=session_id)
+    return {"session_id": session_id, "outbox": [m.__dict__ for m in msgs]}
+
+
+@app.post("/sessions/{session_id}/outbox/{message_id}/delivered")
+def outbox_delivered(session_id: str, message_id: str):
+    """Mark an outbox message delivered.
+
+    Returns {"ok": true/false}
+    """
+    ok = store.mark_delivered(session_id=session_id, message_id=message_id)
+    return {"ok": bool(ok)}
+
+
+@app.post("/sessions/{session_id}/outbox/{message_id}/attempt")
+def outbox_attempt(session_id: str, message_id: str):
+    """Increment attempt counter for an outbox message.
+
+    Returns {"ok": true/false, "attempts": <int|null>}
+    """
+    attempts = store.increment_outbox_attempt(session_id=session_id, message_id=message_id)
+    if attempts < 0:
+        return {"ok": False, "attempts": None}
+    return {"ok": True, "attempts": attempts}
 
 
 @app.delete("/sessions/{session_id}")
