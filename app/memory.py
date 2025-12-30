@@ -189,8 +189,9 @@ class InMemorySessionStore:
         with self._lock:
             for m in self._outbox.get(session_id, []):
                 if m.id == message_id:
+                    # Mark delivered without changing attempts count.
+                    # attempts should only be incremented on failed delivery attempts.
                     m.delivered = True
-                    m.attempts += 1
                     return True
             return False
 
@@ -202,6 +203,7 @@ class InMemorySessionStore:
         with self._lock:
             for m in self._outbox.get(session_id, []):
                 if m.id == message_id:
+                    # attempts increment only on failed delivery attempts
                     m.attempts += 1
                     return m.attempts
             return -1

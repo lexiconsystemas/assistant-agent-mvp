@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import os
+from zoneinfo import ZoneInfo
 from typing import Optional
 
 from app import memory
@@ -41,8 +43,13 @@ def proactive_prompt(session_id: str) -> Optional[str]:
     except AttributeError:
         checkins = []
 
-    # determine if any checkin exists with local date == today
-    today_local = datetime.now().date()
+    # determine if any checkin exists with local date == today in APP_TZ
+    app_tz_name = os.getenv("APP_TZ", "America/New_York")
+    try:
+        tz = ZoneInfo(app_tz_name)
+    except Exception:
+        tz = ZoneInfo("America/New_York")
+    today_local = datetime.now(tz).date()
     has_today = False
     for c in checkins:
         ts = None
@@ -59,9 +66,9 @@ def proactive_prompt(session_id: str) -> Optional[str]:
         if c_dt.tzinfo is None:
             # assume UTC if no tz
             c_dt = c_dt.replace(tzinfo=timezone.utc)
-        # convert to local timezone then compare date
+        # convert to configured APP_TZ then compare date
         try:
-            local_date = c_dt.astimezone().date()
+            local_date = c_dt.astimezone(tz).date()
         except Exception:
             local_date = c_dt.date()
         if local_date == today_local:
