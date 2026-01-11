@@ -53,6 +53,16 @@ class OutboundMessage:
     attempts: int
 
 
+@dataclass
+class InboundMessage:
+    id: str
+    author: str
+    text: str
+    ts: str  # ISO timestamp
+    source: str = "discord"
+    channel_id: str | None = None
+
+
 def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -72,6 +82,7 @@ class InMemorySessionStore:
         self._reminders: Dict[str, List[Reminder]] = {}
         self._checkins: Dict[str, List[CheckIn]] = {}
         self._outbox: Dict[str, List[OutboundMessage]] = {}
+        self._inbox: Dict[str, List[InboundMessage]] = {}
 
     # -------- chat history --------
     def get_history(self, session_id: str, limit: int = 12) -> List[Message]:
@@ -92,6 +103,7 @@ class InMemorySessionStore:
             self._reminders.pop(session_id, None)
             self._checkins.pop(session_id, None)
             self._outbox.pop(session_id, None)
+            self._inbox.pop(session_id, None)
 
     def snapshot(self, session_id: str, limit: int = 50) -> List[Message]:
         return self.get_history(session_id=session_id, limit=limit)
@@ -207,6 +219,47 @@ class InMemorySessionStore:
                     m.attempts += 1
                     return m.attempts
             return -1
+
+    # -------- inbox (inbound messages) --------
+    def add_inbound(self, session_id: str, author: str, text: str, source: str = "discord", 
+                    channel_id: str | None = None, inbound_id: str | None = None) -> InboundMessage:
+        """Add an inbound message to the inbox.
+
+        Args:
+            session_id: Session ID
+            author: Author name/ID
+            text: Message text
+            source: Source platform (default: "discord")
+            channel_id: Optional channel ID
+            inbound_id: Optional external message ID (for deduplication)
+
+        Returns: InboundMessage
+        """
+        with self._lock:
+            msg = InboundMessage(
+                id=inbound_id or str(uuid.uuid4()),
+                author=author,
+                text=text.strip(),
+                ts=_now_iso(),
+                source=source,
+                channel_id=channel_id,
+            )
+            self._inbox.setdefault(session_id, []).append(msg)
+            return msg
+
+    def list_inbound(self, session_id: str, limit: int = 50) -> List[InboundMessage]:
+        """Get inbound messages for a session."""
+        with self._lock:
+            lst = list(self._inbox.get(session_id, []))
+            return lst[-limit:]
+
+    def has_inbound_id(self, session_id: str, inbound_id: str) -> bool:
+        """Check if an inbound message ID already exists (for deduplication)."""
+        with self._lock:
+            for msg in self._inbox.get(session_id, []):
+                if msg.id == inbound_id:
+                    return True
+            return False
 
 
 # Singleton store instance

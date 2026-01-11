@@ -3,9 +3,10 @@ import uuid
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 
 from app.agent import handle_message
-from app.schemas import ChatRequest, ChatResponse
+from app.schemas import ChatRequest, ChatResponse, DiscordIngestRequest, DiscordIngestResponse
 from app.logging_middleware import RequestLoggingMiddleware
 from app.memory import store
 from app.proactive import proactive_prompt
@@ -158,3 +159,55 @@ async def chat(payload: ChatRequest, request: Request):
         session_id=session_id,
         reply=reply,
     )
+
+
+@app.post("/integrations/discord/ingest", response_model=DiscordIngestResponse)
+async def discord_ingest(payload: DiscordIngestRequest, request: Request):
+    """Ingest a Discord message: store inbound, run agent, queue reply.
+
+    Handles deduplication via message_id to prevent repeated processing.
+    """
+    request_id = getattr(request.state, "request_id", str(uuid.uuid4()))
+    session_id = payload.session_id
+    request.state.session_id = session_id
+
+    # Deduplication check
+    if store.has_inbound_id(session_id, payload.message_id):
+        print(f"[DISCORD] request_id={request_id} session_id={session_id} deduped message_id={payload.message_id}")
+        return DiscordIngestResponse(ok=True, deduped=True, queued_reply=False, reply_text=None)
+
+    # Store inbound message
+    store.add_inbound(
+        session_id=session_id,
+        author=payload.author,
+        text=payload.content,
+        source="discord",
+        channel_id=payload.channel_id,
+        inbound_id=payload.message_id,
+    )
+
+    # Append to chat history as user message
+    store.append(session_id=session_id, role="user", content=payload.content)
+
+    # Run agent routing
+    reply_text = handle_message(payload.content, session_id)
+
+    # Store assistant reply and queue to outbox if present
+    store.append(session_id=session_id, role="assistant", content=reply_text)
+    
+    queued_reply = False
+    if reply_text and reply_text.strip():
+        store.add_outbox(session_id=session_id, text=reply_text, reason="discord_reply")
+        queued_reply = True
+
+    print(f"[DISCORD] request_id={request_id} session_id={session_id} ingested message_id={payload.message_id} queued_reply={queued_reply}")
+
+    return DiscordIngestResponse(
+        ok=True,
+        deduped=False,
+        queued_reply=queued_reply,
+        reply_text=reply_text if queued_reply else None,
+    )
+
+
+app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="static")
