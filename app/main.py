@@ -6,9 +6,9 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 
 from app.agent import handle_message
-from app.schemas import ChatRequest, ChatResponse, DiscordIngestRequest, DiscordIngestResponse
+from app.schemas import ChatRequest, ChatResponse, DiscordIngestRequest, DiscordIngestResponse, DiscordInboundEvent, BindDiscordChannelRequest
 from app.logging_middleware import RequestLoggingMiddleware
-from app.memory import store
+from app.memory import store, InboundMessage
 from app.proactive import proactive_prompt
 from app.tools import run_tool
 from datetime import datetime, timezone
@@ -208,6 +208,95 @@ async def discord_ingest(payload: DiscordIngestRequest, request: Request):
         queued_reply=queued_reply,
         reply_text=reply_text if queued_reply else None,
     )
+
+
+@app.post("/sessions/{session_id}/bindings/discord")
+async def bind_discord_channel(session_id: str, payload: BindDiscordChannelRequest, request: Request):
+    """Bind a Discord channel to a session.
+
+    Returns: {"ok": true}
+    """
+    request_id = getattr(request.state, "request_id", str(uuid.uuid4()))
+    request.state.session_id = session_id
+
+    store.bind_discord_channel(session_id=session_id, channel_id=payload.channel_id)
+    print(f"[BIND] request_id={request_id} session_id={session_id} bound to discord channel={payload.channel_id}")
+
+    return {"ok": True}
+
+
+@app.post("/integrations/discord/inbound")
+async def ingest_inbound_discord(payload: DiscordInboundEvent, request: Request):
+    """Ingest an inbound Discord message.
+
+    Resolves session_id from bindings OR accepts hardcoded session (MVP).
+    Creates InboundMessage, stores it, updates last activity, calls agent, and queues reply.
+
+    Returns: {"ok": bool, "session_id": str, "ingested": bool, "reply_text": optional[str]}
+    """
+    request_id = getattr(request.state, "request_id", str(uuid.uuid4()))
+
+    # MVP: hardcode or lookup session by channel binding
+    # For now, lookup via channel_id binding (requires pre-bind call)
+    session_id = None
+    # In a real system, iterate through bindings to find session by channel_id
+    # For MVP, we'll accept an optional query param or environment var
+    session_id = os.getenv("DISCORD_SESSION_ID", None)
+    
+    if not session_id:
+        print(f"[INBOUND] request_id={request_id} no session_id configured (set DISCORD_SESSION_ID env var)")
+        return {"ok": False, "session_id": None, "ingested": False, "reply_text": None}
+
+    request.state.session_id = session_id
+
+    # Check for duplicate
+    if store.has_inbound_id(session_id, payload.message_id):
+        print(f"[INBOUND] request_id={request_id} session_id={session_id} deduped message_id={payload.message_id}")
+        return {"ok": True, "session_id": session_id, "ingested": False, "reply_text": None}
+
+    # Create and store inbound message
+    msg = InboundMessage(
+        id=payload.message_id,
+        source="discord",
+        author=payload.author,
+        text=payload.content.strip(),
+        ts=payload.ts,
+        raw=payload.raw or {},
+    )
+    store.append_inbound(session_id=session_id, msg=msg)
+    store.set_last_user_activity(session_id=session_id, ts_iso=payload.ts)
+
+    print(f"[INBOUND] request_id={request_id} session_id={session_id} stored message_id={payload.message_id} from {payload.author}")
+
+    # Call agent to generate reply
+    reply_text = handle_message(payload.content, session_id)
+
+    # Queue reply if present
+    queued_reply = False
+    if reply_text and reply_text.strip():
+        store.add_outbox(session_id=session_id, text=reply_text, reason="inbound_discord_reply")
+        queued_reply = True
+        print(f"[INBOUND] request_id={request_id} session_id={session_id} queued reply: {reply_text[:60]}...")
+
+    return {
+        "ok": True,
+        "session_id": session_id,
+        "ingested": True,
+        "reply_text": reply_text if queued_reply else None,
+    }
+
+
+@app.get("/sessions/{session_id}/inbox")
+def get_inbox(session_id: str):
+    """Debug endpoint: list inbound messages for a session.
+
+    Returns: {"session_id": str, "inbox": []}
+    """
+    msgs = store.list_inbound(session_id=session_id, limit=50)
+    return {
+        "session_id": session_id,
+        "inbox": [{"id": m.id, "source": m.source, "author": m.author, "text": m.text, "ts": m.ts} for m in msgs],
+    }
 
 
 app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="static")

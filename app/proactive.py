@@ -16,6 +16,7 @@ def proactive_prompt(session_id: str) -> Optional[str]:
     """Return a short proactive message for a session or None.
 
         Logic:
+            0) GUARD: If user replied within last 6 hours, return None (skip proactive)
             1) If no check-in exists for TODAY (local date) => return
                  "Quick check-in: mood? energy (1-10)? focus (1-10)?"
       2) If any reminders are overdue (due_ts < now UTC and not completed) =>
@@ -36,6 +37,20 @@ def proactive_prompt(session_id: str) -> Optional[str]:
 
     store = memory.store
     now = datetime.now(timezone.utc)
+
+    # 0) GUARD: check if user replied within last 6 hours
+    last_activity_ts = store.get_last_user_activity(session_id=session_id)
+    if last_activity_ts:
+        try:
+            last_activity_dt = datetime.fromisoformat(last_activity_ts)
+            if last_activity_dt.tzinfo is None:
+                last_activity_dt = last_activity_dt.replace(tzinfo=timezone.utc)
+            time_since_activity = (now - last_activity_dt).total_seconds()
+            if time_since_activity < 6 * 3600:  # 6 hours in seconds
+                # User replied recently; skip proactive outreach
+                return None
+        except Exception:
+            pass
 
     # 1) check-ins: if no check-in for today's local date, prompt user
     try:

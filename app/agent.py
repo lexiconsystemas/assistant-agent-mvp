@@ -98,3 +98,12 @@ def handle_message(text: str, session_id: str):
                for m in store.get_history(session_id, limit=12)]
 
     return generate_reply(text, session_id=session_id, history=history)
+
+
+def handle_inbound(text: str, session_id: str, source: str = "discord") -> str:
+    """Handle inbound messages from external channels.
+
+    This delegates to `handle_message` for now but provides a seam for
+    future channel-specific behavior (different prompts, routing, etc.).
+    """
+    return handle_message(text, session_id)

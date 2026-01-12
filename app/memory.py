@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timezone, timedelta
-from typing import Dict, List, Literal
+from typing import Dict, List, Literal, Any, Optional
 import threading
 import uuid
 
@@ -56,11 +56,16 @@ class OutboundMessage:
 @dataclass
 class InboundMessage:
     id: str
+    source: str
     author: str
     text: str
     ts: str  # ISO timestamp
-    source: str = "discord"
-    channel_id: str | None = None
+    raw: Dict[str, Any]
+
+
+@dataclass
+class SessionBindings:
+    discord_channel_id: Optional[str] = None
 
 
 def _now_iso() -> str:
@@ -75,6 +80,7 @@ class InMemorySessionStore:
     - persists only while server runs
     - thread-safe for dev via a lock
     """
+
     def __init__(self):
         self._lock = threading.Lock()
         self._sessions: Dict[str, List[Message]] = {}
@@ -83,6 +89,10 @@ class InMemorySessionStore:
         self._checkins: Dict[str, List[CheckIn]] = {}
         self._outbox: Dict[str, List[OutboundMessage]] = {}
         self._inbox: Dict[str, List[InboundMessage]] = {}
+        # session bindings (e.g., discord channel id)
+        self._bindings: Dict[str, SessionBindings] = {}
+        # last user activity timestamps per session (ISO)
+        self._last_user_activity: Dict[str, str] = {}
 
     # -------- chat history --------
     def get_history(self, session_id: str, limit: int = 12) -> List[Message]:
@@ -104,6 +114,8 @@ class InMemorySessionStore:
             self._checkins.pop(session_id, None)
             self._outbox.pop(session_id, None)
             self._inbox.pop(session_id, None)
+            self._bindings.pop(session_id, None)
+            self._last_user_activity.pop(session_id, None)
 
     def snapshot(self, session_id: str, limit: int = 50) -> List[Message]:
         return self.get_history(session_id=session_id, limit=limit)
@@ -222,7 +234,7 @@ class InMemorySessionStore:
 
     # -------- inbox (inbound messages) --------
     def add_inbound(self, session_id: str, author: str, text: str, source: str = "discord", 
-                    channel_id: str | None = None, inbound_id: str | None = None) -> InboundMessage:
+                    channel_id: str | None = None, inbound_id: str | None = None, raw: Dict[str, Any] | None = None) -> InboundMessage:
         """Add an inbound message to the inbox.
 
         Args:
@@ -238,13 +250,15 @@ class InMemorySessionStore:
         with self._lock:
             msg = InboundMessage(
                 id=inbound_id or str(uuid.uuid4()),
+                source=source,
                 author=author,
                 text=text.strip(),
                 ts=_now_iso(),
-                source=source,
-                channel_id=channel_id,
+                raw=raw or {},
             )
             self._inbox.setdefault(session_id, []).append(msg)
+            # update last user activity on inbound
+            self._last_user_activity[session_id] = msg.ts
             return msg
 
     def list_inbound(self, session_id: str, limit: int = 50) -> List[InboundMessage]:
@@ -260,6 +274,33 @@ class InMemorySessionStore:
                 if msg.id == inbound_id:
                     return True
             return False
+
+    # -------- bindings & last-activity --------
+    def bind_discord_channel(self, session_id: str, channel_id: str) -> None:
+        """Bind a discord channel id to a session."""
+        with self._lock:
+            b = self._bindings.setdefault(session_id, SessionBindings())
+            b.discord_channel_id = channel_id
+
+    def get_discord_channel(self, session_id: str) -> Optional[str]:
+        with self._lock:
+            b = self._bindings.get(session_id)
+            return b.discord_channel_id if b else None
+
+    def append_inbound(self, session_id: str, msg: InboundMessage) -> InboundMessage:
+        """Append an InboundMessage instance to the inbox and update last activity."""
+        with self._lock:
+            self._inbox.setdefault(session_id, []).append(msg)
+            self._last_user_activity[session_id] = msg.ts
+            return msg
+
+    def set_last_user_activity(self, session_id: str, ts_iso: str) -> None:
+        with self._lock:
+            self._last_user_activity[session_id] = ts_iso
+
+    def get_last_user_activity(self, session_id: str) -> Optional[str]:
+        with self._lock:
+            return self._last_user_activity.get(session_id)
 
 
 # Singleton store instance
