@@ -286,6 +286,26 @@ class DatabaseStore:
                 return True
             return False
 
+    def mark_outbox_delivered(self, session_id: str, message_id: str, delivered: bool, delivered_at: Optional[str] = None) -> bool:
+        """Mark outbox message as delivered with timestamp"""
+        with self._get_db() as db:
+            msg = (
+                db.query(OutboundMessage)
+                .filter(
+                    OutboundMessage.session_id == session_id,
+                    OutboundMessage.id == message_id,
+                )
+                .first()
+            )
+            if msg:
+                msg.delivered = delivered
+                if delivered_at:
+                    from datetime import datetime
+                    msg.delivered_at = datetime.fromisoformat(delivered_at.replace('Z', '+00:00'))
+                db.commit()
+                return True
+            return False
+
     def increment_outbox_attempt(self, session_id: str, message_id: str) -> int:
         """Increment delivery attempt counter"""
         with self._get_db() as db:

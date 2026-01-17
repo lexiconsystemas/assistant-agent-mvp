@@ -1,0 +1,355 @@
+INFO:     Will watch for changes in these directories: ['/Users/simonelawson/Documents/GitHub/assistant-agent-mvp']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [8834] using WatchFiles
+INFO:     Started server process [8841]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+[START] request_id=77aec6eb-2dde-4d6c-ac7f-1c365359cd01 session_id=None GET /health
+[END]   request_id=77aec6eb-2dde-4d6c-ac7f-1c365359cd01 session_id=None status=200 duration_ms=6
+INFO:     127.0.0.1:64502 - "GET /health HTTP/1.1" 200 OK
+[START] request_id=7a3fd6ca-b641-467a-b67f-c75c3ce183b1 session_id=None DELETE /sessions/pitch-demo-session
+[END]   request_id=7a3fd6ca-b641-467a-b67f-c75c3ce183b1 session_id=None status=200 duration_ms=742
+INFO:     127.0.0.1:64519 - "DELETE /sessions/pitch-demo-session HTTP/1.1" 200 OK
+[START] request_id=4b4966eb-6a56-4f24-a851-dd05230bb788 session_id=None POST /integrations/discord/inbound
+[INBOUND] request_id=4b4966eb-6a56-4f24-a851-dd05230bb788 session_id=pitch-demo-session stored message_id=config-test-1768614571 from ConfigTest
+[INBOUND] request_id=4b4966eb-6a56-4f24-a851-dd05230bb788 session_id=pitch-demo-session queued reply: Understood, this is a configuration test message. I'm ready ...
+[END]   request_id=4b4966eb-6a56-4f24-a851-dd05230bb788 session_id=None status=200 duration_ms=1406
+INFO:     127.0.0.1:64523 - "POST /integrations/discord/inbound HTTP/1.1" 200 OK
+[START] request_id=c964bb3e-45e4-4395-a20a-7e359191d2a6 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=c964bb3e-45e4-4395-a20a-7e359191d2a6 session_id=None status=200 duration_ms=33
+INFO:     127.0.0.1:64539 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=85ee7735-059c-4e97-98fc-71142c404a0e session_id=None PATCH /sessions/pitch-demo-session/outbox/9049ee81-45f2-479c-92e3-51ea911f4b67
+[END]   request_id=85ee7735-059c-4e97-98fc-71142c404a0e session_id=None status=200 duration_ms=246
+INFO:     127.0.0.1:64541 - "PATCH /sessions/pitch-demo-session/outbox/9049ee81-45f2-479c-92e3-51ea911f4b67 HTTP/1.1" 200 OK
+[START] request_id=0ffc810c-86c8-4974-aa52-36cd66283813 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=0ffc810c-86c8-4974-aa52-36cd66283813 session_id=None status=200 duration_ms=17
+INFO:     127.0.0.1:64547 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=30399298-35dc-4c48-8b0e-a44465595c27 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=30399298-35dc-4c48-8b0e-a44465595c27 session_id=None status=200 duration_ms=5
+INFO:     127.0.0.1:64552 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=aa3ebc1a-d3c8-4895-8f93-61be4825da7f session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=aa3ebc1a-d3c8-4895-8f93-61be4825da7f session_id=None status=200 duration_ms=8
+INFO:     127.0.0.1:64557 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=913e8f61-cb54-44c7-8458-717a2470ba04 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=913e8f61-cb54-44c7-8458-717a2470ba04 session_id=None status=200 duration_ms=5
+INFO:     127.0.0.1:64562 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=900d271d-25af-4464-90c2-89ce0bf2ac51 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=900d271d-25af-4464-90c2-89ce0bf2ac51 session_id=None status=200 duration_ms=9
+INFO:     127.0.0.1:64569 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=ceceda34-ae29-4a26-b9b3-76119ddf3d1c session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=ceceda34-ae29-4a26-b9b3-76119ddf3d1c session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:64574 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=81a8c50f-4270-4ce0-8a79-04a1529d1c09 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=81a8c50f-4270-4ce0-8a79-04a1529d1c09 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64579 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=01d2a095-1f32-431b-9293-d09c0199da44 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=01d2a095-1f32-431b-9293-d09c0199da44 session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64584 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=e5b2d8ce-8b0e-49f9-8cc2-3c2232ee273c session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=e5b2d8ce-8b0e-49f9-8cc2-3c2232ee273c session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64589 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=e63bbf55-0270-4b2e-a2d8-dfb84cd8ceb6 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=e63bbf55-0270-4b2e-a2d8-dfb84cd8ceb6 session_id=None status=200 duration_ms=26
+INFO:     127.0.0.1:64594 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=605b5996-9ca4-474d-abb1-d92e703e57e4 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=605b5996-9ca4-474d-abb1-d92e703e57e4 session_id=None status=200 duration_ms=868
+INFO:     127.0.0.1:64600 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=118cb238-814e-470b-9d61-44aa58c7b225 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=118cb238-814e-470b-9d61-44aa58c7b225 session_id=None status=200 duration_ms=54
+INFO:     127.0.0.1:64607 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=f02a0302-791f-445f-9f8f-6eb55a97bf40 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=f02a0302-791f-445f-9f8f-6eb55a97bf40 session_id=None status=200 duration_ms=111
+INFO:     127.0.0.1:64613 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=d319bbcd-873f-433c-8e11-9898a99993d8 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=d319bbcd-873f-433c-8e11-9898a99993d8 session_id=None status=200 duration_ms=112
+INFO:     127.0.0.1:64618 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=41f06a89-8324-4bcf-ae2c-67225f84957b session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=41f06a89-8324-4bcf-ae2c-67225f84957b session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:64625 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=26027be2-9526-46a9-b143-3de0bf4cc466 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=26027be2-9526-46a9-b143-3de0bf4cc466 session_id=None status=200 duration_ms=141
+INFO:     127.0.0.1:64630 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=bec4d23f-df17-43a0-bc4a-5ba0b1c14287 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=bec4d23f-df17-43a0-bc4a-5ba0b1c14287 session_id=None status=200 duration_ms=348
+INFO:     127.0.0.1:64635 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=5dc259a4-9619-41c3-a6c6-95d6d2be4a53 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=5dc259a4-9619-41c3-a6c6-95d6d2be4a53 session_id=None status=200 duration_ms=124
+INFO:     127.0.0.1:64641 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=5063cd20-d1cf-403b-aba3-c89cd2040c91 session_id=None POST /integrations/discord/inbound
+[INBOUND] request_id=5063cd20-d1cf-403b-aba3-c89cd2040c91 session_id=pitch-demo-session stored message_id=1461900484863328256 from simonesaturn
+[INBOUND] request_id=5063cd20-d1cf-403b-aba3-c89cd2040c91 session_id=pitch-demo-session queued reply: Hello! How can I assist you today? I'm happy to help with ta...
+[END]   request_id=5063cd20-d1cf-403b-aba3-c89cd2040c91 session_id=None status=200 duration_ms=1198
+INFO:     127.0.0.1:64643 - "POST /integrations/discord/inbound HTTP/1.1" 200 OK
+[START] request_id=a065565e-474d-4854-a613-93262004afc0 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=a065565e-474d-4854-a613-93262004afc0 session_id=None status=200 duration_ms=54
+INFO:     127.0.0.1:64652 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=dbcc3b39-5716-45c6-ac88-3139ac08609b session_id=None PATCH /sessions/pitch-demo-session/outbox/df39b542-e7ab-4cee-acdc-72524e136589
+[END]   request_id=dbcc3b39-5716-45c6-ac88-3139ac08609b session_id=None status=200 duration_ms=68
+INFO:     127.0.0.1:64655 - "PATCH /sessions/pitch-demo-session/outbox/df39b542-e7ab-4cee-acdc-72524e136589 HTTP/1.1" 200 OK
+[START] request_id=ee35a598-4f3c-4a63-903d-65931065a46a session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=ee35a598-4f3c-4a63-903d-65931065a46a session_id=None status=200 duration_ms=12
+INFO:     127.0.0.1:64663 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=b213bb19-0839-40c9-b96b-d6f753d82cb3 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=b213bb19-0839-40c9-b96b-d6f753d82cb3 session_id=None status=200 duration_ms=20
+INFO:     127.0.0.1:64669 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=2755e563-595a-41d3-8c2f-918ef80e6b39 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=2755e563-595a-41d3-8c2f-918ef80e6b39 session_id=None status=200 duration_ms=7
+INFO:     127.0.0.1:64677 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=ef35687c-1240-414c-8e52-3c7c361b1d36 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=ef35687c-1240-414c-8e52-3c7c361b1d36 session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64683 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=e690d948-ab80-4d5e-86c6-262ca30dd3db session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=e690d948-ab80-4d5e-86c6-262ca30dd3db session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:64689 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=5f3af072-d43b-49b7-9617-a09424290994 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=5f3af072-d43b-49b7-9617-a09424290994 session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:64694 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=231a6d1b-148c-48a1-a28a-716e46fcd617 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=231a6d1b-148c-48a1-a28a-716e46fcd617 session_id=None status=200 duration_ms=72
+INFO:     127.0.0.1:64699 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=c6a43017-c814-4333-9261-6f858ae9ed83 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=c6a43017-c814-4333-9261-6f858ae9ed83 session_id=None status=200 duration_ms=11
+INFO:     127.0.0.1:64704 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=284b3f4d-e8d6-4595-b248-6d64e6a8f43f session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=284b3f4d-e8d6-4595-b248-6d64e6a8f43f session_id=None status=200 duration_ms=7
+INFO:     127.0.0.1:64709 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=320e3638-b570-46f3-8089-09223f90adff session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=320e3638-b570-46f3-8089-09223f90adff session_id=None status=200 duration_ms=246
+INFO:     127.0.0.1:64716 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=6b96ee98-ea7c-41ac-b0f9-b76e462d896d session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=6b96ee98-ea7c-41ac-b0f9-b76e462d896d session_id=None status=200 duration_ms=27
+INFO:     127.0.0.1:64723 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=fa7d177e-6d66-4a47-9968-b727f032da7f session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=fa7d177e-6d66-4a47-9968-b727f032da7f session_id=None status=200 duration_ms=14
+INFO:     127.0.0.1:64728 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=3741475f-d23e-4024-9b79-c0965b6572e0 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=3741475f-d23e-4024-9b79-c0965b6572e0 session_id=None status=200 duration_ms=33
+INFO:     127.0.0.1:64735 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=72fc643f-e7e3-4292-9585-9ee2ea79e17f session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=72fc643f-e7e3-4292-9585-9ee2ea79e17f session_id=None status=200 duration_ms=97
+INFO:     127.0.0.1:64740 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=48f89920-e9a7-4f1c-b946-3055433511b1 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=48f89920-e9a7-4f1c-b946-3055433511b1 session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64745 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=70b15572-13d3-47a8-a0f2-f2951536e946 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=70b15572-13d3-47a8-a0f2-f2951536e946 session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64750 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=d055c6f6-9535-4b18-9934-29d80292bf97 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=d055c6f6-9535-4b18-9934-29d80292bf97 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64755 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=ea1922f1-7a94-4c33-a8c7-d864d5c7a6cb session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=ea1922f1-7a94-4c33-a8c7-d864d5c7a6cb session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64761 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=31d05bb5-c473-4595-9acb-5354da071b37 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=31d05bb5-c473-4595-9acb-5354da071b37 session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64769 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=adae8c71-2bbb-41ab-8e6b-6f75072d9573 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=adae8c71-2bbb-41ab-8e6b-6f75072d9573 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64774 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=85736b35-fae9-4298-8581-d24528a74ed9 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=85736b35-fae9-4298-8581-d24528a74ed9 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64780 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=306a64bf-911b-4434-85a6-adad5f5dfd0c session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=306a64bf-911b-4434-85a6-adad5f5dfd0c session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64786 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=256ad635-ce8c-439b-ba4a-adc56ef0b480 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=256ad635-ce8c-439b-ba4a-adc56ef0b480 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64791 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=5e363988-f137-4935-86d0-b9624aa655b4 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=5e363988-f137-4935-86d0-b9624aa655b4 session_id=None status=200 duration_ms=16
+INFO:     127.0.0.1:64796 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=5aa02bb2-10fb-4c5b-aca5-774b59bf222a session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=5aa02bb2-10fb-4c5b-aca5-774b59bf222a session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64802 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=27192400-fcf6-4997-89dd-ff2a1ae839f9 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=27192400-fcf6-4997-89dd-ff2a1ae839f9 session_id=None status=200 duration_ms=50
+INFO:     127.0.0.1:64807 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=a774294f-e22c-45d4-938b-3286be50e0a5 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=a774294f-e22c-45d4-938b-3286be50e0a5 session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64812 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=77bf5efa-82e9-44fc-88ae-ff784a3065a8 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=77bf5efa-82e9-44fc-88ae-ff784a3065a8 session_id=None status=200 duration_ms=10
+INFO:     127.0.0.1:64817 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=28efc037-4ca2-444f-8121-727315b2a559 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=28efc037-4ca2-444f-8121-727315b2a559 session_id=None status=200 duration_ms=7
+INFO:     127.0.0.1:64822 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=ca65864b-e343-45d8-9dd6-da59383a840f session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=ca65864b-e343-45d8-9dd6-da59383a840f session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:64828 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=1ea6eaed-4ffe-4415-9dc9-0542166977ef session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=1ea6eaed-4ffe-4415-9dc9-0542166977ef session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64834 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=d96e69db-cf26-4dd6-91b6-1022f811ad6a session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=d96e69db-cf26-4dd6-91b6-1022f811ad6a session_id=None status=200 duration_ms=44
+INFO:     127.0.0.1:64839 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=8b92fb10-9315-4154-9d4b-1e028c3c7294 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=8b92fb10-9315-4154-9d4b-1e028c3c7294 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64847 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=788a88a0-58e5-420a-85cd-21fd535e4a25 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=788a88a0-58e5-420a-85cd-21fd535e4a25 session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64853 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=7701f401-a6ed-4f8a-a512-323b4d744b51 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=7701f401-a6ed-4f8a-a512-323b4d744b51 session_id=None status=200 duration_ms=37
+INFO:     127.0.0.1:64863 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=06613b51-d56c-4cbd-8dc9-5c19fdf5ca94 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=06613b51-d56c-4cbd-8dc9-5c19fdf5ca94 session_id=None status=200 duration_ms=297
+INFO:     127.0.0.1:64874 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=b848c728-2c96-477e-978b-c25d35d7cab3 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=b848c728-2c96-477e-978b-c25d35d7cab3 session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:64879 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=0d1d9e5f-b544-4142-8d3d-09fe7ed5aadd session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=0d1d9e5f-b544-4142-8d3d-09fe7ed5aadd session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64884 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=88b2ed74-1a4b-416b-83f2-a8eb0fa969ca session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=88b2ed74-1a4b-416b-83f2-a8eb0fa969ca session_id=None status=200 duration_ms=13
+INFO:     127.0.0.1:64890 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=18383e91-db56-4563-bd87-de56a68169c7 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=18383e91-db56-4563-bd87-de56a68169c7 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64895 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=91aba72f-0644-47c3-ab11-b8a72fa86044 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=91aba72f-0644-47c3-ab11-b8a72fa86044 session_id=None status=200 duration_ms=18
+INFO:     127.0.0.1:64900 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=ac9ee36a-74d6-4e48-bb69-94dcc9bee531 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=ac9ee36a-74d6-4e48-bb69-94dcc9bee531 session_id=None status=200 duration_ms=9
+INFO:     127.0.0.1:64906 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=9d853537-76e7-422d-98f9-3ecf2777424e session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=9d853537-76e7-422d-98f9-3ecf2777424e session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64911 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=9edfc0e8-b664-4136-a2b7-fbf5d9b595da session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=9edfc0e8-b664-4136-a2b7-fbf5d9b595da session_id=None status=200 duration_ms=31
+INFO:     127.0.0.1:64916 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=8da5e61e-522d-4232-a14d-0ae9a4b9ebfd session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=8da5e61e-522d-4232-a14d-0ae9a4b9ebfd session_id=None status=200 duration_ms=18
+INFO:     127.0.0.1:64922 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=2300f524-be3d-4b1c-bafe-eb1c020e8c02 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=2300f524-be3d-4b1c-bafe-eb1c020e8c02 session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64927 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=368add13-caa7-42b7-9882-22d566affead session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=368add13-caa7-42b7-9882-22d566affead session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64932 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=32e5398e-d6b8-4ffd-bffa-60094bd0c091 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=32e5398e-d6b8-4ffd-bffa-60094bd0c091 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64937 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=899bc16d-eb14-4bc8-b0b9-653752f9b6bb session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=899bc16d-eb14-4bc8-b0b9-653752f9b6bb session_id=None status=200 duration_ms=6
+INFO:     127.0.0.1:64944 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=d6cbb2c8-08fc-4c04-94a0-4aaa209cf6b4 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=d6cbb2c8-08fc-4c04-94a0-4aaa209cf6b4 session_id=None status=200 duration_ms=42
+INFO:     127.0.0.1:64949 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=f82e44f9-df79-46eb-9e0f-dd2343e63611 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=f82e44f9-df79-46eb-9e0f-dd2343e63611 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64955 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=33c3add9-e32e-455c-8dcf-7f8fc1cb2479 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=33c3add9-e32e-455c-8dcf-7f8fc1cb2479 session_id=None status=200 duration_ms=109
+INFO:     127.0.0.1:64960 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=83ea3676-9162-43fb-b46e-55b077c74134 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=83ea3676-9162-43fb-b46e-55b077c74134 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:64966 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=36f6a820-35ab-41f9-ba8b-b10f9bd486c3 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=36f6a820-35ab-41f9-ba8b-b10f9bd486c3 session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:64972 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=f7f11c6b-fce5-4320-b194-b5b2242adc6b session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=f7f11c6b-fce5-4320-b194-b5b2242adc6b session_id=None status=200 duration_ms=11
+INFO:     127.0.0.1:64978 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=045bccd0-4911-4fa8-8177-5c77284827e7 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=045bccd0-4911-4fa8-8177-5c77284827e7 session_id=None status=200 duration_ms=8
+INFO:     127.0.0.1:64983 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=a5384cc2-f029-4bc9-950f-cb0ff8a6c654 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=a5384cc2-f029-4bc9-950f-cb0ff8a6c654 session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:64988 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=047c727f-f984-433b-b323-09e29caa4cde session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=047c727f-f984-433b-b323-09e29caa4cde session_id=None status=200 duration_ms=8
+INFO:     127.0.0.1:64993 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=92deb06b-3a5e-4b7f-84f7-1853c01f2ade session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=92deb06b-3a5e-4b7f-84f7-1853c01f2ade session_id=None status=200 duration_ms=37
+INFO:     127.0.0.1:64999 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=90567450-c622-4ccf-9c05-1e4561b9a6d8 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=90567450-c622-4ccf-9c05-1e4561b9a6d8 session_id=None status=200 duration_ms=91
+INFO:     127.0.0.1:65005 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=71e71fc2-904d-4806-b3b0-b7bcdf433297 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=71e71fc2-904d-4806-b3b0-b7bcdf433297 session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:65010 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=1f6e0f23-5188-442b-93d8-6ca8f3557dba session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=1f6e0f23-5188-442b-93d8-6ca8f3557dba session_id=None status=200 duration_ms=44
+INFO:     127.0.0.1:65015 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=83a0c9a5-4b21-4f40-8698-fb7ce463fc12 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=83a0c9a5-4b21-4f40-8698-fb7ce463fc12 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:65020 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=a109497c-15a6-4147-8444-b592748171cb session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=a109497c-15a6-4147-8444-b592748171cb session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:65025 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=b8690441-d270-4d1b-ae0f-0068c225265c session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=b8690441-d270-4d1b-ae0f-0068c225265c session_id=None status=200 duration_ms=25
+INFO:     127.0.0.1:65031 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=d69d1e7d-aa43-43e9-b4a0-9d5d82534c2e session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=d69d1e7d-aa43-43e9-b4a0-9d5d82534c2e session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:65037 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=daf27627-fc28-4a91-aaec-c51286f48033 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=daf27627-fc28-4a91-aaec-c51286f48033 session_id=None status=200 duration_ms=26
+INFO:     127.0.0.1:65050 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=8dc03782-ae00-4115-9ad9-87499d285277 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=8dc03782-ae00-4115-9ad9-87499d285277 session_id=None status=200 duration_ms=58
+INFO:     127.0.0.1:65056 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=5b799848-d935-4fc3-81df-d3154e375409 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=5b799848-d935-4fc3-81df-d3154e375409 session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:65081 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=45926656-a6f2-4e22-a78b-d7a8b252dad3 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=45926656-a6f2-4e22-a78b-d7a8b252dad3 session_id=None status=200 duration_ms=5
+INFO:     127.0.0.1:65086 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=2d58aece-bbe1-4a02-8d48-d59b13c6b3bc session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=2d58aece-bbe1-4a02-8d48-d59b13c6b3bc session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:65092 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=bd39e8c6-e57e-4293-99d3-17aa7f313d1a session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=bd39e8c6-e57e-4293-99d3-17aa7f313d1a session_id=None status=200 duration_ms=131
+INFO:     127.0.0.1:65097 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=cc576b3f-f2ce-4a26-8f84-7385fcfe941f session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=cc576b3f-f2ce-4a26-8f84-7385fcfe941f session_id=None status=200 duration_ms=5
+INFO:     127.0.0.1:65106 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=fa6730e6-17ac-4e7e-954c-afccf47a3a2c session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=fa6730e6-17ac-4e7e-954c-afccf47a3a2c session_id=None status=200 duration_ms=37
+INFO:     127.0.0.1:65112 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=284ce803-9282-4a9d-96a8-f5fef09c4cdb session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=284ce803-9282-4a9d-96a8-f5fef09c4cdb session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:65126 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=800dfdd3-03a6-418c-b3ee-589964b2f06d session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=800dfdd3-03a6-418c-b3ee-589964b2f06d session_id=None status=200 duration_ms=92
+INFO:     127.0.0.1:65137 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=0a497d55-3496-4041-af7d-45f2b00e0745 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=0a497d55-3496-4041-af7d-45f2b00e0745 session_id=None status=200 duration_ms=3
+INFO:     127.0.0.1:65142 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=2473c8fe-745b-4b32-89a4-d5fef93dd6a8 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=2473c8fe-745b-4b32-89a4-d5fef93dd6a8 session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:65149 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=8b3358b1-e0eb-4bad-a287-c9aecde67893 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=8b3358b1-e0eb-4bad-a287-c9aecde67893 session_id=None status=200 duration_ms=4
+INFO:     127.0.0.1:65154 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=85f795f4-2b7c-4432-8940-6661d6e92b2b session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=85f795f4-2b7c-4432-8940-6661d6e92b2b session_id=None status=200 duration_ms=13
+INFO:     127.0.0.1:65160 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=75b271cb-9c6b-4815-bdd1-dffc20dbb779 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=75b271cb-9c6b-4815-bdd1-dffc20dbb779 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:65165 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=4c642a29-4563-4f05-aba7-caa28b335e7e session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=4c642a29-4563-4f05-aba7-caa28b335e7e session_id=None status=200 duration_ms=1050
+INFO:     127.0.0.1:65170 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=59f54dc5-fde5-4e37-9ea2-8bec68f7580a session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=59f54dc5-fde5-4e37-9ea2-8bec68f7580a session_id=None status=200 duration_ms=23
+INFO:     127.0.0.1:65176 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=397d3a0a-082e-426a-bdac-ad85420d35f1 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=397d3a0a-082e-426a-bdac-ad85420d35f1 session_id=None status=200 duration_ms=5
+INFO:     127.0.0.1:65183 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=870591fb-1bd3-4ab9-9320-d6aee7c7564a session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=870591fb-1bd3-4ab9-9320-d6aee7c7564a session_id=None status=200 duration_ms=8
+INFO:     127.0.0.1:65188 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=1932da0a-c764-44bc-b357-2768b14ab724 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=1932da0a-c764-44bc-b357-2768b14ab724 session_id=None status=200 duration_ms=6
+INFO:     127.0.0.1:65193 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=543e6252-1b43-41d4-934a-593d73274d17 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=543e6252-1b43-41d4-934a-593d73274d17 session_id=None status=200 duration_ms=6
+INFO:     127.0.0.1:65198 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=cb659456-95f4-478f-bc31-e60ce0b67e19 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=cb659456-95f4-478f-bc31-e60ce0b67e19 session_id=None status=200 duration_ms=24
+INFO:     127.0.0.1:65205 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK
+[START] request_id=6aef3542-2f53-472a-a0c6-2e3dd48b6be6 session_id=None GET /sessions/pitch-demo-session/outbox
+[END]   request_id=6aef3542-2f53-472a-a0c6-2e3dd48b6be6 session_id=None status=200 duration_ms=2
+INFO:     127.0.0.1:65212 - "GET /sessions/pitch-demo-session/outbox HTTP/1.1" 200 OK

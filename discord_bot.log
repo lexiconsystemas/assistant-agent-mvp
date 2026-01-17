@@ -1,0 +1,26 @@
+[INFO] discord_full_bot: Starting Discord Full Bot
+[INFO] discord_full_bot: API Base URL: http://localhost:8000
+[INFO] discord_full_bot: Session ID: pitch-demo-session
+[WARNING] discord.client: PyNaCl is not installed, voice will NOT be supported
+[INFO] discord.client: logging in using static token
+[INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 596bde74b4e1a51669aaff1687ae88d2).
+[INFO] discord_full_bot: Bot logged in as V(a)²#7974 (ID: 1455431719468404860)
+[INFO] discord_full_bot: Monitoring and replying in channel: 1455374022840680574
+[INFO] discord_full_bot: Starting outbox polling loop...
+[INFO] discord_full_bot: Found 1 undelivered messages
+[INFO] discord_full_bot: Sending reply: Understood, this is a configuration test message. I'm ready ...
+[INFO] discord_full_bot: ✓ Reply sent and marked as delivered
+[INFO] discord_full_bot: ============================================================
+[INFO] discord_full_bot: POSTING MESSAGE TO BACKEND
+[INFO] discord_full_bot: URL: http://localhost:8000/integrations/discord/inbound
+[INFO] discord_full_bot: Author: simonesaturn
+[INFO] discord_full_bot: Content: hello
+[INFO] discord_full_bot: ============================================================
+[INFO] discord_full_bot: Backend response: 200
+[INFO] discord_full_bot: ✓ Message accepted by backend
+[INFO] discord_full_bot: ✓ Message processed (not duplicate)
+[INFO] discord_full_bot: ✓ REPLY GENERATED: Hello! How can I assist you today? I'm happy to help with tasks, reminders, or a daily check-in....
+[INFO] discord_full_bot:   (Reply queued in outbox for delivery)
+[INFO] discord_full_bot: Found 1 undelivered messages
+[INFO] discord_full_bot: Sending reply: Hello! How can I assist you today? I'm happy to help with ta...
+[INFO] discord_full_bot: ✓ Reply sent and marked as delivered

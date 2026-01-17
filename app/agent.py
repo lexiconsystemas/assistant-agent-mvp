@@ -94,7 +94,7 @@ def handle_message(text: str, session_id: str):
             return "Task completed." if result.get("ok") else "Task not found."
 
     # FALLBACK: LLM
-    history = [{"role": m.role, "content": m.content}
+    history = [{"role": m["role"], "content": m["content"]}
                for m in store.get_history(session_id, limit=12)]
 
     return generate_reply(text, session_id=session_id, history=history)

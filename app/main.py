@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from app.agent import handle_message
 from app.schemas import ChatRequest, ChatResponse, DiscordIngestRequest, DiscordIngestResponse, DiscordInboundEvent, BindDiscordChannelRequest
 from app.logging_middleware import RequestLoggingMiddleware
-from app.memory import store, InboundMessage
+from app.memory import store
 from app.proactive import proactive_prompt
 from app.tools import run_tool
 from datetime import datetime, timezone
@@ -105,10 +105,10 @@ def proactive_tick(session_id: str):
 @app.get("/sessions/{session_id}/outbox")
 def get_outbox(session_id: str):
     msgs = store.list_outbox(session_id=session_id)
-    return {"session_id": session_id, "outbox": [m.__dict__ for m in msgs]}
+    return {"session_id": session_id, "outbox": msgs}
 
 
-@app.post("/sessions/{session_id}/outbox/{message_id}/delivered")
+@app.patch("/sessions/{session_id}/outbox/{message_id}")
 def outbox_delivered(session_id: str, message_id: str):
     """Mark an outbox message delivered.
 
@@ -254,16 +254,16 @@ async def ingest_inbound_discord(payload: DiscordInboundEvent, request: Request)
         print(f"[INBOUND] request_id={request_id} session_id={session_id} deduped message_id={payload.message_id}")
         return {"ok": True, "session_id": session_id, "ingested": False, "reply_text": None}
 
-    # Create and store inbound message
-    msg = InboundMessage(
-        id=payload.message_id,
-        source="discord",
+    # Store inbound message (for tracking)
+    store.add_inbound(
+        session_id=session_id,
         author=payload.author,
         text=payload.content.strip(),
-        ts=payload.ts,
+        source="discord",
+        channel_id=payload.channel_id,
+        inbound_id=payload.message_id,
         raw=payload.raw or {},
     )
-    store.append_inbound(session_id=session_id, msg=msg)
     store.set_last_user_activity(session_id=session_id, ts_iso=payload.ts)
 
     print(f"[INBOUND] request_id={request_id} session_id={session_id} stored message_id={payload.message_id} from {payload.author}")

@@ -1,22 +1,17 @@
 #!/usr/bin/env python3
 """
-Discord Listener Bot — Real-time message capture via discord.py
+Discord Full Bot - Listens for messages AND sends replies
 
-Connects to Discord, listens for messages in configured channel(s),
-and POSTs inbound messages to the FastAPI backend.
+This combines the listener and reply sender into one bot to avoid permission issues.
 
 Environment Variables:
   DISCORD_BOT_TOKEN (required): Discord bot token
   API_BASE_URL (required): Backend URL (e.g., http://127.0.0.1:8000)
-  SESSION_ID (required): Session ID for inbound messages (MVP hardcoded)
-  DISCORD_CHANNEL_ID (optional): Specific channel to monitor (if empty, listen to all)
+  SESSION_ID (required): Session ID for messages
+  DISCORD_CHANNEL_ID (required): Channel to monitor and reply in
 
 Usage:
-  python scripts/discord_listener_bot.py
-
-Notes:
-  - Requires discord.py: pip install discord.py
-  - Bot must have Message Content Intent enabled in Discord Developer Portal
+  python scripts/discord_full_bot.py
 """
 
 import os
@@ -24,6 +19,7 @@ import sys
 import json
 import requests
 import logging
+import asyncio
 from typing import Optional
 
 import discord
@@ -34,7 +30,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="[%(levelname)s] %(name)s: %(message)s",
 )
-logger = logging.getLogger("discord_listener")
+logger = logging.getLogger("discord_full_bot")
 
 
 def _env_or_error(key: str) -> str:
@@ -46,24 +42,29 @@ def _env_or_error(key: str) -> str:
     return val
 
 
-class DiscordListenerBot(commands.Cog):
-    """Cog for handling Discord messages and posting to backend."""
+class DiscordFullBot(commands.Cog):
+    """Combined Discord bot for listening and replying."""
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.bot_token = _env_or_error("DISCORD_BOT_TOKEN")
         self.api_base_url = _env_or_error("API_BASE_URL").rstrip("/")
         self.session_id = _env_or_error("SESSION_ID")
-        self.channel_id = os.getenv("DISCORD_CHANNEL_ID")  # optional
+        self.channel_id = _env_or_error("DISCORD_CHANNEL_ID")
+        
+        self.reply_task = None
 
     @commands.Cog.listener()
     async def on_ready(self):
         """Called when bot connects and is ready."""
         logger.info(f"Bot logged in as {self.bot.user} (ID: {self.bot.user.id})")
         if self.channel_id:
-            logger.info(f"Listening to channel: {self.channel_id}")
+            logger.info(f"Monitoring and replying in channel: {self.channel_id}")
         else:
-            logger.info("Listening to all channels (no DISCORD_CHANNEL_ID set)")
+            logger.info("Monitoring all channels (no DISCORD_CHANNEL_ID set)")
+        
+        # Start reply polling task
+        self.reply_task = asyncio.create_task(self.poll_outbox())
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
@@ -141,6 +142,81 @@ class DiscordListenerBot(commands.Cog):
             logger.error(traceback.format_exc())
             return False
 
+    async def poll_outbox(self):
+        """Poll backend outbox and send replies."""
+        logger.info("Starting outbox polling loop...")
+        
+        while True:
+            try:
+                # Get undelivered messages from outbox
+                response = requests.get(
+                    f"{self.api_base_url}/sessions/{self.session_id}/outbox",
+                    timeout=10
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    outbox = data.get("outbox", [])
+                    
+                    # Find undelivered messages
+                    undelivered = [msg for msg in outbox if not msg.get("delivered", False)]
+                    
+                    if undelivered:
+                        logger.info(f"Found {len(undelivered)} undelivered messages")
+                        
+                        for msg in undelivered:
+                            await self.send_reply(msg)
+                            
+                else:
+                    logger.error(f"Failed to get outbox: {response.status_code}")
+                
+                # Wait before next poll
+                await asyncio.sleep(3)
+                
+            except Exception as e:
+                logger.error(f"Error in polling loop: {e}")
+                await asyncio.sleep(5)
+
+    async def send_reply(self, msg: dict):
+        """Send a reply message to Discord."""
+        try:
+            text = msg.get("text", "").strip()
+            if not text:
+                logger.warning("Empty message, skipping")
+                return
+
+            logger.info(f"Sending reply: {text[:60]}...")
+            
+            # Get the channel (use bot.get_channel, not self.bot.get_channel)
+            channel = self.bot.get_channel(int(self.channel_id))
+            if not channel:
+                logger.error(f"Could not find channel {self.channel_id}")
+                # Debug: List all channels the bot can see
+                logger.info("Available channels:")
+                for guild in self.bot.guilds:
+                    logger.info(f"  Guild: {guild.name}")
+                    for ch in guild.text_channels:
+                        logger.info(f"    - {ch.name} (ID: {ch.id})")
+                return
+            
+            # Send message to Discord
+            discord_msg = await channel.send(text)
+            
+            # Mark as delivered in backend
+            response = requests.patch(
+                f"{self.api_base_url}/sessions/{self.session_id}/outbox/{msg['id']}",
+                json={"delivered": True, "delivered_at": discord_msg.created_at.isoformat()},
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                logger.info(f"✓ Reply sent and marked as delivered")
+            else:
+                logger.error(f"Failed to mark as delivered: {response.status_code}")
+                
+        except Exception as e:
+            logger.error(f"Error sending reply: {e}")
+
 
 async def main():
     """Initialize and run the bot."""
@@ -148,7 +224,7 @@ async def main():
     api_base_url = _env_or_error("API_BASE_URL")
     session_id = _env_or_error("SESSION_ID")
 
-    logger.info(f"Starting Discord listener bot")
+    logger.info(f"Starting Discord Full Bot")
     logger.info(f"API Base URL: {api_base_url}")
     logger.info(f"Session ID: {session_id}")
 
@@ -159,8 +235,8 @@ async def main():
 
     bot = commands.Bot(command_prefix="!", intents=intents)
 
-    # Add the listener cog
-    await bot.add_cog(DiscordListenerBot(bot))
+    # Add the cog
+    await bot.add_cog(DiscordFullBot(bot))
 
     # Start the bot
     try:
@@ -174,10 +250,10 @@ async def main():
 
 
 if __name__ == "__main__":
-    import asyncio
-
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        logger.info("Interrupted")
-        sys.exit(0)
+        logger.info("Shutting down...")
+    except Exception as e:
+        logger.error(f"Fatal error: {e}")
+        sys.exit(1)
